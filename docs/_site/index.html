@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+
+<!-- Begin Jekyll SEO tag v2.3.0 -->
+<title>Videojs Annotation Comments | A plugin for video.js to add support for timeline moment/range comments and annotations</title>
+<meta property="og:title" content="Videojs Annotation Comments" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="A plugin for video.js to add support for timeline moment/range comments and annotations" />
+<meta property="og:description" content="A plugin for video.js to add support for timeline moment/range comments and annotations" />
+<link rel="canonical" href="http://localhost:4000/" />
+<meta property="og:url" content="http://localhost:4000/" />
+<meta property="og:site_name" content="Videojs Annotation Comments" />
+<script type="application/ld+json">
+{"name":"Videojs Annotation Comments","description":"A plugin for video.js to add support for timeline moment/range comments and annotations","url":"http://localhost:4000/","headline":"Videojs Annotation Comments","dateModified":null,"datePublished":null,"sameAs":null,"@type":"WebSite","author":null,"image":null,"publisher":null,"mainEntityOfPage":null,"@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <meta name="description" content="A plugin for video.js to add support for timeline moment/range comments and annotations"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+
+    <link href="//vjs.zencdn.net/6.2.0/video-js.min.css" rel="stylesheet">
+    <link href="build/css/annotations.css" rel="stylesheet">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Videojs Annotation Comments</h1>
+      <h2 class="project-tagline">A plugin for video.js to add support for timeline moment/range comments and annotations</h2>
+      
+      
+        <a href="" class="btn">Download .zip</a>
+        <a href="" class="btn">Download .tar.gz</a>
+      
+    </section>
+
+    <section class="main-content">
+      <div class="video-container">
+        <video id="the_video" class="video-js" controls preload="auto" width="720" height="405" poster="MY_VIDEO_POSTER.jpg" data-setup="{}">
+          <source src="assets/video/contently-platform-overview.mp4" type='video/mp4'>
+          <p class="vjs-no-js">
+            To view this video please enable JavaScript, and consider upgrading to a web browser that
+            <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+          </p>
+        </video>
+      </div>
+      <div class="console-container">
+        <div class="console"></div>
+      </div>
+    </section>
+
+    <section class="main-content">
+      <h1 id="collaborate-in-your-videojs-player">Collaborate in your VideoJS player</h1>
+
+<p><img src="test/screenshot.png" alt="AnnotationComments Screenshot1" /></p>
+
+<h3 id="background">Background</h3>
+
+<p>This plugin was conceived and initially developed as a Hack Week project @ <a href="http://www.contently.com">Contently</a> by <a href="http://www.github.com/ecaroth">Evan Carothers</a> &amp; <a href="http://www.github.com/jackpope">Jack Pope</a>. With our continuing focus and commitment to multimedia support @ Contently, it was further productized and bulletproofed by our entire team, as a flexible solution for use in our product and other open-source use cases.</p>
+
+<h3 id="goals">Goals</h3>
+
+<ul>
+  <li><strong>USEFUL</strong> - Provide useful collaboration features including annotations, comments/replies, ranged time markers, and more. All with intuitive controls.</li>
+  <li><strong>SIMPLE &amp; LIGHTWEIGHT</strong> - Everything is contained within the plugin and player element. There is no need to build additional UI components. Just install VideoJS, register the plugin, setup whatever backend storage you wish, and start collaborating.</li>
+  <li><strong>EXTENSIBLE</strong> - The plugin can be integrated with existing commenting systems, and makes very few assumptions about how you store your comments/annotations. Custom events are available for communicating with external APIs, providing support for on-page interactions and data persistence. Simple CSS overrides can also allow for branding customizations with minimal effort, or completely custom UI/UX.</li>
+</ul>
+
+<h3 id="videojs-plugins">VideoJS Plugins</h3>
+
+<p><a href="http://videojs.com/">VideoJS</a> is a popular open-source HTML5 video player library used by 400k+ sites. As of v6, there is an extendable plugin architecture which was used to create this plugin. This plugin is built and tested against <a href="https://www.npmjs.com/package/video.js/">VideoJS v 6.2.0</a></p>
+
+<h3 id="add-it-to-your-videojs-player">Add it to your VideoJS player</h3>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="c1">// Initialize VideoJS &amp; Plugin</span>
+<span class="kd">var</span> <span class="nx">player</span> <span class="o">=</span> <span class="nx">videojs</span><span class="p">(</span><span class="s1">'video-id'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">plugin</span> <span class="o">=</span> <span class="nx">player</span><span class="p">.</span><span class="nx">annotationComments</span><span class="p">(</span><span class="nx">pluginOptions</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<h3 id="plugin-options--configuration">Plugin options / configuration</h3>
+
+<p>When initializing the plugin, you can pass in an options array to override default options. Any excluded options are set to their default values, listed below:</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kr">const</span> <span class="nx">pluginOptions</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="c1">// Collection of annotation data to initialize</span>
+        <span class="na">annotationsObjects</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="c1">// Flexible meta data object (currently used for user data, but addl data can be provided to wrap each comment with metadata - provide the id of the current user and fullname of the current user at minimum, which are required for the UI)</span>
+        <span class="na">meta</span><span class="p">:</span> <span class="p">{</span> <span class="na">user_id</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span> <span class="na">user_name</span><span class="p">:</span> <span class="kc">null</span> <span class="p">},</span>
+        <span class="c1">// Use arrow keys to move through annotations when Annotation mode is active</span>
+        <span class="na">bindArrowKeys</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="c1">// Show or hide the control panel and annotation toggle button (NOTE - if controls are hidden you must provide custom UI and events to drive the annotations - more on that in "Programmatic Control" below)</span>
+        <span class="na">showControls</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="c1">// Show or hide the comment list when an annotation is active. If false, the text 'Click and drag to select', will follow the cursor during annotation mode</span>
+        <span class="na">showCommentList</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="c1">// If false, annotations mode will be disabled in fullscreen</span>
+        <span class="na">showFullScreen</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="c1">// Show or hide the tooltips with comment preview, and annotation shape, on marker hover or timeline activate</span>
+        <span class="na">showMarkerShapeAndTooltips</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="c1">// If false, step two of adding annotations (writing and saving the comment) will be disabled</span>
+        <span class="na">internalCommenting</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="c1">// If true, toggle the player to annotation mode immediately after init. (NOTE - "annotationModeEnabled" event is not fired for this initial state)</span>
+        <span class="na">startInAnnotationMode</span><span class="p">:</span> <span class="kc">false</span>
+<span class="p">};</span>
+</code></pre>
+</div>
+
+<h3 id="annotation-data-structure">Annotation Data Structure</h3>
+
+<p>To initialize the plugin with the <code class="highlighter-rouge">annotationsObjects</code> collection, use the following structure:</p>
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kr">const</span> <span class="nx">annotationsObjects</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="nx">id</span><span class="err">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="nx">range</span><span class="err">:</span> <span class="p">{</span>
+        <span class="nl">start</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+        <span class="nx">end</span><span class="err">:</span> <span class="mi">15</span>
+    <span class="p">},</span>
+    <span class="nx">shape</span><span class="err">:</span> <span class="p">{</span>
+        <span class="nl">x1</span><span class="p">:</span> <span class="mf">23.47</span><span class="p">,</span>
+        <span class="nx">y1</span><span class="err">:</span> <span class="mf">9.88</span><span class="p">,</span>
+        <span class="nx">x2</span><span class="err">:</span> <span class="mf">60.83</span><span class="p">,</span>
+        <span class="nx">y2</span><span class="err">:</span> <span class="mf">44.2</span>
+    <span class="p">},</span>
+    <span class="nx">comments</span><span class="err">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="na">id</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="na">meta</span><span class="p">:</span> <span class="p">{</span>
+                <span class="na">datetime</span><span class="p">:</span> <span class="s1">'2017-03-28T19:17:32.238Z'</span><span class="p">,</span>
+                <span class="na">user_id</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                <span class="na">user_name</span><span class="p">:</span> <span class="s1">'Jack Pope'</span>
+            <span class="p">},</span>
+            <span class="na">body</span><span class="p">:</span> <span class="s1">'The first comment!'</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">];</span>
+</code></pre>
+</div>
+
+<h3 id="programmatic-control">Programmatic Control</h3>
+
+<p>If you’d like to drive the plugin or render plugin data through external UI elements, you can configure the plugin to hide the internal components and pass data through custom events. There are two kinds of AnnotationComments API events, <em>externally fired</em> and <em>internally fired</em>.</p>
+
+<h5 id="waiting-for-plugin-ready">Waiting for Plugin Ready</h5>
+
+<p>Before triggering any events on the plugin, you must wait for it to be ready. You can use the <code class="highlighter-rouge">onReady</code> function on the plugin:</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="nx">plugin</span><span class="p">.</span><span class="nx">onReady</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="c1">// do stuff with the plugin, such as fire events or setup listeners</span>
+<span class="p">}));</span>
+</code></pre>
+</div>
+
+<h5 id="supported-externally-fired-events">Supported Externally Fired Events:</h5>
+
+<p>These events are external actions that can be called from your scripts to trigger events within the plugin:</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="c1">// openAnnotation : Opens an annotation within the player given an ID</span>
+<span class="nx">plugin</span><span class="p">.</span><span class="nx">fire</span><span class="p">(</span><span class="s1">'openAnnotation'</span><span class="p">,</span> <span class="p">{</span> <span class="na">id</span><span class="p">:</span> <span class="nx">myAnnotationId</span> <span class="p">});</span>
+
+<span class="c1">// closeActiveAnnotation : Closes any active annotation</span>
+<span class="nx">plugin</span><span class="p">.</span><span class="nx">fire</span><span class="p">(</span><span class="s1">'closeActiveAnnotation'</span><span class="p">);</span>
+
+<span class="c1">// newAnnotation : Adds a new annotation within the player and opens it given comment data</span>
+<span class="nx">plugin</span><span class="p">.</span><span class="nx">fire</span><span class="p">(</span><span class="s1">'newAnnotation'</span><span class="p">,</span> <span class="p">{</span>
+    <span class="na">id</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="na">range</span><span class="p">:</span> <span class="p">{</span> <span class="na">start</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span> <span class="na">end</span><span class="p">:</span> <span class="kc">null</span> <span class="p">},</span>
+    <span class="na">shape</span><span class="p">:</span> <span class="p">{</span> <span class="c1">// NOTE - x/y vals are % based (Floats) in video, not pixel values</span>
+        <span class="na">x1</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+        <span class="na">x2</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+        <span class="na">y1</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+        <span class="na">y2</span><span class="p">:</span> <span class="kc">null</span>
+    <span class="p">}</span>
+    <span class="nl">commentStr</span><span class="p">:</span> <span class="s2">"This is my comment."</span>
+<span class="p">});</span>
+
+<span class="c1">// destroyAnnotation : Removes an annotation and it's marker within the player given comment data</span>
+<span class="nx">plugin</span><span class="p">.</span><span class="nx">fire</span><span class="p">(</span><span class="s1">'destroyAnnotation'</span><span class="p">,</span> <span class="p">{</span> <span class="na">id</span><span class="p">:</span> <span class="mi">1</span> <span class="p">});</span>
+
+<span class="c1">// newComment : Adds a new comment to an Annotation given an Annotation ID and a body</span>
+<span class="nx">plugin</span><span class="p">.</span><span class="nx">fire</span><span class="p">(</span><span class="s1">'newComment'</span><span class="p">,</span> <span class="p">{</span> <span class="na">annotationId</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="na">body</span><span class="p">:</span> <span class="s2">"My comment string"</span> <span class="p">});</span>
+
+<span class="c1">// destroyComment : Removes a comment from an Annotation given a Comment ID</span>
+<span class="nx">plugin</span><span class="p">.</span><span class="nx">fire</span><span class="p">(</span><span class="s1">'destroyComment'</span><span class="p">,</span> <span class="p">{</span> <span class="na">id</span><span class="p">:</span> <span class="mi">1</span> <span class="p">});</span>
+
+<span class="c1">// addingAnnotation : Plugin enters the adding annotation state (adding an annotation at the current player timestamp)</span>
+<span class="nx">plugin</span><span class="p">.</span><span class="nx">fire</span><span class="p">(</span><span class="s1">'addingAnnotation'</span><span class="p">);</span>
+
+<span class="c1">// cancelAddingAnnotation : Plugin exits the adding annotation state</span>
+<span class="nx">plugin</span><span class="p">.</span><span class="nx">fire</span><span class="p">(</span><span class="s1">'cancelAddingAnnotation'</span><span class="p">);</span>
+
+<span class="c1">// toggleAnnotationMode : toggle annotation mode to alternative on/off value</span>
+<span class="nx">plugin</span><span class="p">.</span><span class="nx">fire</span><span class="p">(</span><span class="s1">'toggleAnnotations'</span><span class="p">);</span>
+</code></pre>
+</div>
+
+<h5 id="supported-internally-fired-events">Supported Internally Fired Events:</h5>
+<p>These are events that are triggered from within the running plugin and can be listened for by binding to <code class="highlighter-rouge">plugin.on</code> within your scripts:</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="c1">// annotationOpened : Fired whenever an annotation is opened</span>
+<span class="nx">plugin</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">'annotationOpened'</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="c1">// event.detail =</span>
+    <span class="c1">// {</span>
+    <span class="c1">//      annotation: (object) annotation data in format {id:.., comments:..., range:..., shape:...},</span>
+    <span class="c1">//      triggered_by_timeline: (boolean) TRUE = the event was triggered via a timeline action (like scrubbing or playing), FALSE = the annotation was opened via marker click, UI button interactions, or API/event input</span>
+    <span class="c1">// }</span>
+<span class="p">});</span>
+
+<span class="c1">// annotationClosed : Fired whenever an annotation is closed</span>
+<span class="nx">plugin</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">'annotationClosed'</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="c1">// event.detail = annotation (object) in format {id:.., comments:..., range:..., shape:...}</span>
+<span class="p">});</span>
+
+<span class="c1">// addingAnnotationDataChanged : Fired from adding annotation state if:</span>
+<span class="c1">//  1. the marker is dragged</span>
+<span class="c1">//  2. the start of the marker is moved via control buttons</span>
+<span class="c1">//  3. the shape is dragged</span>
+<span class="nx">plugin</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">'addingAnnotationDataChanged'</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">newRange</span> <span class="o">=</span> <span class="nx">event</span><span class="p">.</span><span class="nx">detail</span><span class="p">.</span><span class="nx">range</span><span class="p">;</span> <span class="c1">// returns range data if range was changed</span>
+    <span class="kd">var</span> <span class="nx">newShape</span> <span class="o">=</span> <span class="nx">event</span><span class="p">.</span><span class="nx">detail</span><span class="p">.</span><span class="nx">shape</span><span class="p">;</span> <span class="c1">// returns shape data if shape was changed</span>
+    <span class="c1">// do something with the data</span>
+<span class="p">});</span>
+
+<span class="c1">// annotationDeleted : Fired when an annotation has been deleted via the UI</span>
+<span class="nx">plugin</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">'annotationDeleted'</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="c1">// annotationId = event.detail</span>
+<span class="p">});</span>
+
+<span class="c1">// enteredAnnotationMode : Fired when the plugin enters adding annotation mode</span>
+<span class="c1">// includes initial range data</span>
+<span class="nx">plugin</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">'enteredAddingAnnotation'</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">startTime</span> <span class="o">=</span> <span class="nx">event</span><span class="p">.</span><span class="nx">detail</span><span class="p">.</span><span class="nx">range</span><span class="p">.</span><span class="nx">start</span><span class="p">;</span>
+    <span class="c1">// do something when adding annotation state begins</span>
+<span class="p">});</span>
+
+<span class="c1">// onStateChanged: Fired when plugin state has changed (annotation added, removed, etc)</span>
+<span class="c1">// This is a way to watch global plugin state, as an alternative to watching various annotation events</span>
+<span class="nx">plugin</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">'onStateChanged'</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="c1">// event.detail = annotation state data</span>
+<span class="p">});</span>
+
+<span class="c1">// playerBoundsChanged : Fired when the player boundaries change due to window resize or fullscreen mode</span>
+<span class="nx">plugin</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">'playerBoundsChanged'</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">bounds</span> <span class="o">=</span> <span class="nx">event</span><span class="p">.</span><span class="nx">detail</span><span class="p">;</span>
+    <span class="c1">// do something with the new boundaries</span>
+<span class="p">});</span>
+
+<span class="c1">// Entering annotation mode (annotation icon was clicked when previously 'off')</span>
+<span class="nx">plugin</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">'annotationModeEnabled'</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="c1">// do something</span>
+<span class="p">});</span>
+
+<span class="c1">// Exiting annotation mode (annotation icon was clicked when previously 'on')</span>
+<span class="nx">plugin</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">'annotationModeDisabled'</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="c1">// do something</span>
+<span class="p">});</span>
+</code></pre>
+</div>
+
+<h3 id="develop-and-build">Develop and Build</h3>
+
+<p>We’re using <a href="https://www.npmjs.com/">npm</a> for package management and <a href="https://github.com/gulpjs/gulp">gulp</a> as our build system.</p>
+
+<p>The fastest way to get started:</p>
+<ul>
+  <li>Clone the repo</li>
+  <li>Run <code class="highlighter-rouge">npm install</code></li>
+  <li>Run <code class="highlighter-rouge">npm install -g gulp</code></li>
+  <li>Run <code class="highlighter-rouge">gulp build</code></li>
+  <li>Run <code class="highlighter-rouge">gulp watch</code></li>
+  <li>Visit <code class="highlighter-rouge">http://localhost:3004/test.html</code> to see the magic happen.</li>
+</ul>
+
+<h4 id="templates">Templates</h4>
+
+<p>We’re using the <a href="http://handlebarsjs.com/">Handlebars</a> templating library to render various components within the plugin. For performance, the templates are pre-compiled into a JS file within the development environment. That way we only need to require the Handlebars runtime, saving nearly 100kb from the minified build! ⚡️</p>
+
+<p>The <code class="highlighter-rouge">gulp templates</code> task is used to precompile every template to <code class="highlighter-rouge">/src/js/compiled/templates.js</code>. This file should <em>not</em> be modified directly, but rather the templates themselves in <code class="highlighter-rouge">/src/templates</code> should be modified if changes are needed. The templates task will run automatically within <code class="highlighter-rouge">gulp watch</code>.</p>
+
+<h4 id="ui--css-customization">UI / CSS Customization</h4>
+
+<p>The plugin uses SASS and all styles are defined in <a href="src/css/annotations.scss">annotaitons.scss</a>. There is extenssive commenting on classes and styles in the file. The plugin uses a deep level of specificity to prevent styles from polluting elements on the page, and all classes are prefixed with <code class="highlighter-rouge">vac-</code> to prevent classname collisions in the global namespace.</p>
+
+<p>You can extend/modify colors and elements quite easily by writing an overrides stylesheet to address the specific elements that you wish to modify. You can also change the variable colors in the stylesheet and compile yourself for more customization.</p>
+
+<p><em>NOTE</em> - our gulp build tasks use an auto-prefixer to make the styles work cross-browser, so be sure to run that yourself if you compile the SASS files with changes.</p>
+
+<h4 id="testing">Testing</h4>
+
+<h5 id="feature-tests">Feature tests</h5>
+
+<p>Feature tests are currently browser-based and run by visiting <code class="highlighter-rouge">http://localhost:3004/mocha/features/index.html</code>. Feature tests can be added as files in the <code class="highlighter-rouge">/test/mocha/features/</code> directory and then included within the <code class="highlighter-rouge">index.html</code> file as a external scripts.</p>
+
+<h5 id="unit-tests">Unit tests</h5>
+
+<p>Unit tests are run through the <code class="highlighter-rouge">gulp test</code> task. If the <code class="highlighter-rouge">tdd</code> task is included in <code class="highlighter-rouge">gulp watch</code>, the tests will run with every change to the test files. Each module should have a corresponding unit test file within the <code class="highlighter-rouge">/test/mocha/modules</code> directory.</p>
+
+<h4 id="gulp-commands">Gulp commands</h4>
+
+<p><code class="highlighter-rouge">gulp watch</code>: Fires up webserver @ <code class="highlighter-rouge">http://localhost:3004/test.html</code>, watches for any file changes in <code class="highlighter-rouge">/src</code>, including js, css (scss), and templates (.hbs), repackages, and transpiles to an unminified file in <code class="highlighter-rouge">/build</code> on change.</p>
+
+<p><code class="highlighter-rouge">gulp transpile</code>: Transpiles modules/files to build file in <code class="highlighter-rouge">/build</code> with JS maps</p>
+
+<p><code class="highlighter-rouge">gulp build</code>: Runs transpilation, browserify, sass, then minifies to distribution filename in <code class="highlighter-rouge">/build</code> with attribution</p>
+
+<p><code class="highlighter-rouge">gulp templates</code>: Uses Handlebars to pre-compile templates into a javascript file. See Templates section above.</p>
+
+<p><code class="highlighter-rouge">gulp test</code>: Runs the mocha unit tests within the <code class="highlighter-rouge">/test/mocha/modules/</code> directory.</p>
+
+<p><code class="highlighter-rouge">gulp lint</code>: Runs jshint linter on javascript files in <code class="highlighter-rouge">/src</code></p>
+
+<h4 id="license">License</h4>
+
+<p>This plugin is <a href="license.md">licensed</a> under the Apache License, Version 2.0, which is the same license used by Video.js</p>
+
+
+      <footer class="site-footer">
+        
+      </footer>
+    </section>
+
+    
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="//vjs.zencdn.net/6.2.0/video.min.js"></script>
+    <script src="build/videojs-annotation-comments.min.js"></script>
+
+    <script>
+      var annotations = [];
+      var player = videojs('the_video');
+      player.annotationComments({
+        annotationsObjects: annotations,
+        bindArrowKeys: true,
+        meta: {
+          user_id: 1,
+          user_name: "John Smith"
+        }
+      });
+    </script>
+
+    <script>
+      window.VAC_DEBUG = true;
+
+      // Intercept VAC logs and port them to console UI
+      (function(){
+        var oldLog = console.log;
+        console.log = function (msg) {
+          if (msg === "::VAC::") {
+            var output = ""
+            for(var i = 0; i <= arguments.length; i++) {
+              output = output + " " + JSON.stringify(arguments[i]);
+            }
+            // Remove extra quotes and any undefined
+            // TODO: combine this shit into a regexp
+            output = output.replace("\"", "");
+            output = output.replace("\"", "");
+            output = output.replace("undefined", "");
+            output = ">> " + output;
+            var $p = $("<p/>").text(output); 
+            $(".console").append($p);
+            // TODO: scroll to bottom of .console
+          }
+
+          oldLog.apply(console, arguments);
+        };
+      })();
+    </script>
+  </body>
+</html>

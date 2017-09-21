@@ -1,0 +1,54 @@
+---
+---
+
+@import 'jekyll-theme-cayman';
+
+.page-header {
+	padding: 2rem 6rem;
+	background-image: linear-gradient(120deg, #00A6C2, #ee9828);
+}
+
+@for $index from 1 through 6 {
+	.main-content {
+		h#{$index}{
+    		color: #ee9828;
+  		}
+	}
+}
+
+a {
+	cursor: pointer;
+}
+
+.main-content {
+	clear: both;
+}
+
+.the_video-dimensions {
+	width: 100% !important;
+}
+
+.video-container, .console-container {
+	float: left;
+	width: 45%;
+}
+
+.console-container {
+	margin-left: 5%;
+
+	.console {
+		background-color: #f9f9f9;
+		border: 2px solid #b3b3b3;
+		height: 400px;
+		width: 100%;
+		padding: 10px 10px 5px 0;
+		white-space: nowrap;
+	    overflow: scroll;
+
+		p {
+			margin: 0;
+		    font-size: 0.7em;
+		    margin-left: 10px;
+		}
+	}
+}
