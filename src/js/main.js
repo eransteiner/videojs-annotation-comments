@@ -9,7 +9,7 @@
           AnnotationState = require("./components/annotation_state").class,
           EventDispatcher = require("./lib/event_dispatcher").class;
 
-    const DEFAULT_OPTIONS =     Object.freeze({
+    const DEFAULT_OPTIONS = Object.freeze({
         bindArrowKeys:              true,
         meta:                       { user_id: null, user_name: null },
         annotationsObjects:         [],
@@ -159,7 +159,6 @@
                 $(this.player.el()).find("[class^='vac-']").remove();
             }
             super.dispose();
-
         }
 
         teardown () {
